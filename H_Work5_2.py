@@ -1,17 +1,12 @@
 from typing import Callable
+import re
 
-def is_float(s: str) -> bool:
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
 
 def generator_numbers(text: str):
-    words = text.split()
-    for word in words:
-        if is_float(word):
-            yield float(word)
+    pattern = r'\b\d+\.\d+\b'
+    numbers = re.findall(pattern, text)
+    for number in numbers:
+        yield float(number)
 
 def sum_profit(text: str, func: Callable):
     numbers_generator = func(text)
@@ -19,6 +14,6 @@ def sum_profit(text: str, func: Callable):
     return total
 
 
-text = "Загальний дохід  складається з декількох частин: 1000.01 як основний дохід, доповнений додатковими надходженнями 27.45 і 324.00 доларів."
+text = "Загальний дохід  складається з декількох частин:1000.01 як основний дохід, доповнений додатковими надходженнями 27.45 і 324.00 доларів."
 total_income = sum_profit(text, generator_numbers)
 print(f"Загальний дохід: {total_income}")
